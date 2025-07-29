@@ -34,3 +34,8 @@
 # friends.remove(friends[4])
 # print(friends)
 # print(f"\nA {friends[4].title()} was busy so he could not make it.")
+
+####################################################################################
+
+# message = "Hello Python Crash Course reader!"
+# print(mesage)
