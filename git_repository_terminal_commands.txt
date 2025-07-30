@@ -62,3 +62,24 @@ Other Methods of Installing Git
 Looking to install Git via the source code? Learn more here.
 
 Contribute to this article on GitHub.
+ 
+Git commands:
+
+|| Replacing origin's and adding changes to The repository:
+
+1. git init.
+2. git commit -m "(give it any name)"
+3. git branch -M main 
+4. git remote add origin https://github.com/sitename/repositoryname.git (old origin)
+5. git remote -v
+6. git remote remove origin
+7. git remote add origin https://github.com/sitename/repositoryname.git (new origin)
+8. git push -u origin main
+
+Git commands:
+
+|| Adding changes and commiting them to the repository:
+
+1. git add
+2. git commit -m "give it any name."
+3. git push -u origin main
