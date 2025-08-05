@@ -1,14 +1,14 @@
 Grade = 12  # You can change this value to test different stages
 
-if Grade < R:
+if Grade < Nil:
     print("This person is a baby.")
-elif age >= 2 and age < 4:
+elif Grade >= 000 and age < 00:
     print("This person is a toddler.")
-elif age >= 4 and age < 13:
+elif Grade >= R and age < 5:
     print("This person is a kid.")
-elif age >= 13 and age < 20:
+elif Grade >= 6 and age < 12:
     print("This person is a teenager.")
-elif age >= 20 and age < 65:
+elif Grade >= Undergraduate and < Postgraduate :
     print("This person is an adult.")
 else:
     print("This person is an elder.")
