@@ -1,4 +1,4 @@
-banned_users = ['andrew', 'carolina', 'david']
+banned_users = ['andrew', 'carolina', 'david', 'kabelo', 'samkelo']
 user = 'marie'
 
 if user not in banned_users:
