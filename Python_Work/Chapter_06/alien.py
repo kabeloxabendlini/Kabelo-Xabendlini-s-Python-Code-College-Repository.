@@ -3,11 +3,15 @@
 # print(alien_0['color'])
 # print(alien_0['points'])
 
+########################## Line 1 - 6 ############################################
+ 
 alien_0 = {'color': 'green', 'points': 5}
 print(alien_0)
 
 del alien_0['points']
 print(alien_0)
+
+########################## Line 14 - 22 ############################################
 
 # alien_0 = {'color': 'green', 'points': 5}
 
@@ -16,6 +20,8 @@ print(alien_0)
 
 # alien_0 = {'color': 'green', 'points': 5}
 # print(alien_0)
+
+########################## Line 24 - 35 ############################################
 
 # alien_0['x_position'] = 0
 # alien_0['y_position'] = 25
@@ -28,6 +34,8 @@ print(alien_0)
 
 # print(alien_0)
 
+########################## Line 37 - 46 ############################################ 
+
 # alien_0 = {'color': 'green'}
 # print(f"The alien is {alien_0['color']}.")
 
@@ -36,6 +44,8 @@ print(alien_0)
 
 # alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'medium'}
 # print(f"Original position: {alien_0['x_position']}")
+
+########################## Line 50 - 63 ############################################ 
 
 # # Move the alien to the right.
 # # Determine how far to move the alien based on its current speed.
@@ -51,6 +61,8 @@ print(alien_0)
 # alien_0['x_position'] = alien_0['x_position'] + x_increment
 
 # print(f"New position: {alien_0['x_position']}")
+
+########################## Line 67 - 71 ############################################
 
 # alien_0 = {'color': 'green', 'points': 5}
 # print(alien_0)
