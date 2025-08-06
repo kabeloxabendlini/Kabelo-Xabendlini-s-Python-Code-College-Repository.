@@ -3,15 +3,15 @@
 # print(alien_0['color'])
 # print(alien_0['points'])
 
-########################## Line 1 - 6 ############################################
+########################## Line 1 - 4 ############################################
  
-alien_0 = {'color': 'green', 'points': 5}
-print(alien_0)
+# alien_0 = {'color': 'green', 'points': 5}
+# print(alien_0)
 
-del alien_0['points']
-print(alien_0)
+# del alien_0['points']
+# print(alien_0)
 
-########################## Line 14 - 22 ############################################
+########################## Line 8 - 12 ############################################
 
 # alien_0 = {'color': 'green', 'points': 5}
 
@@ -21,7 +21,7 @@ print(alien_0)
 # alien_0 = {'color': 'green', 'points': 5}
 # print(alien_0)
 
-########################## Line 24 - 35 ############################################
+########################## Line 16 - 22 ############################################
 
 # alien_0['x_position'] = 0
 # alien_0['y_position'] = 25
@@ -34,7 +34,7 @@ print(alien_0)
 
 # print(alien_0)
 
-########################## Line 37 - 46 ############################################ 
+########################## Line 26 - 35 ############################################ 
 
 # alien_0 = {'color': 'green'}
 # print(f"The alien is {alien_0['color']}.")
@@ -45,7 +45,7 @@ print(alien_0)
 # alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'medium'}
 # print(f"Original position: {alien_0['x_position']}")
 
-########################## Line 50 - 63 ############################################ 
+########################## Line 39 - 46 ############################################ 
 
 # # Move the alien to the right.
 # # Determine how far to move the alien based on its current speed.
@@ -62,7 +62,7 @@ print(alien_0)
 
 # print(f"New position: {alien_0['x_position']}")
 
-########################## Line 67 - 71 ############################################
+########################## Line 50 - 62 ############################################
 
 # alien_0 = {'color': 'green', 'points': 5}
 # print(alien_0)
@@ -70,7 +70,7 @@ print(alien_0)
 # del alien_0['points']
 # print(alien_0)
 
-########################## Line 75 - 89 ############################################
+########################## Line 67 - 71 ############################################
 
 # Make an empty list for storing aliens.
 aliens = []
@@ -88,7 +88,7 @@ print("...")
 # Show how many aliens have been created.
 print(f"Total number of aliens: {len(aliens)}")
 
-########################## Line 93 - 113 ############################################
+########################## Line 75 - 89 ############################################
 
 # Make an empty list for storing aliens.
 aliens = []
@@ -111,3 +111,5 @@ print("...")
 
 # Show how many aliens have been created.
 print(f"Total number of aliens: {len(aliens)}")
+
+########################## Line 93 - 113 ############################################
