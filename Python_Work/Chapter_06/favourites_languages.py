@@ -1,9 +1,9 @@
-favorite_languages = {
-    'jen': 'python',
-    'sarah': 'c',
-    'edward': 'rust',
-    'phil': 'python',
-    }
+# favorite_languages = {
+#     'jen': 'python',
+#     'sarah': 'c',
+#     'edward': 'rust',
+#     'phil': 'python',
+#     }
 
 ##################################### 1 - 6 ###############################################
 
@@ -59,3 +59,55 @@ favorite_languages = {
 #     print("Erin, please take our poll!")
 
 ##################################### 51 - 59 ################################################
+
+# favorite_languages = {
+#     'jen': 'python',
+#     'sarah': 'c',
+#     'edward': 'rust',
+#     'phil': 'python',
+#     }
+
+# for name in sorted(favorite_languages.keys()):
+#     print(f"{name.title()}, thank you for taking the poll.")
+
+##################################### 63 - 71 ################################################
+
+# favorite_languages = {
+#     'jen': 'python',
+#     'sarah': 'c',
+#     'edward': 'rust',
+#     'phil': 'python',
+#     }
+
+# print("The following languages have been mentioned:")
+# for language in favorite_languages.values():
+#     print(language.title())
+
+##################################### 75 - 84 ################################################
+
+favorite_languages = {
+    'jen': 'python',
+    'sarah': 'c',
+    'edward': 'rust',
+    'phil': 'python',
+    }
+
+print("The following languages have been mentioned:")
+for language in set(favorite_languages.values()):
+    print(language.title())
+
+##################################### 88 - 87 ################################################
+
+#     favorite_languages = {
+#       'jen': ['python', 'rust'],
+#       'sarah': ['c'],
+#       'edward': ['rust', 'go'],
+#       'phil': ['python', 'haskell'],
+#       }
+
+# for name, languages in favorite_languages.items():
+#     print(f"\n{name.title()}'s favorite languages are:")
+#     for language in languages:
+#         print(f"\t{language.title()}")
+
+##################################### 101 - 111 ################################################
