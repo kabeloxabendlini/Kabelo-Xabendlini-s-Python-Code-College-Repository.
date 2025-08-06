@@ -1,5 +1,5 @@
 # Variable name for if statement (age):
-age = 63
+age = 14
 
 # If statement for the age variable along wity it's conditions:
 if age < 4:
