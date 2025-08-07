@@ -14,3 +14,13 @@ while unconfirmed_users:
 print("\nThe following users have been confirmed:")
 for confirmed_user in confirmed_users:
     print(confirmed_user.title())
+
+
+
+prompt = "\nTell me something, and I will repeat it back to you:"
+prompt += "\nEnter 'quit' to end the program. "
+
+message = ""
+while message != 'quit':
+    message = input(prompt)
+    print(message)
