@@ -12,7 +12,7 @@ while active:
 
 #################################### Line 1 - 11 ###############################
 
-message = input("Tell me something, and I will repeat it back to you: ")
-print(message)
+# message = input("Tell me something, and I will repeat it back to you: ")
+# print(message)
 
 #################################### Line 15 - 16 ###############################
