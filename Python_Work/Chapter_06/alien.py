@@ -1,115 +1,110 @@
-# alien_0 = {'color': 'green', 'points': 5}
+# Create a dictionary representing an alien with color and points attributes
+alien_0 = {'color': 'green', 'points': 5}
 
-# print(alien_0['color'])
-# print(alien_0['points'])
+# Print the value associated with the 'color' key
+print(alien_0['color'])
 
-########################## Line 1 - 4 ############################################
- 
-# alien_0 = {'color': 'green', 'points': 5}
-# print(alien_0)
+# Print the value associated with the 'points' key
+print(alien_0['points'])
 
-# del alien_0['points']
-# print(alien_0)
+# Store the value of the 'points' key in a variable called new_points
+new_points = alien_0['points']
 
-########################## Line 8 - 12 ############################################
+# Print a message showing how many points were earned
+print(f"You just earned {new_points} points!")
 
-# alien_0 = {'color': 'green', 'points': 5}
+# Print the current state of the alien_0 dictionary
+print(alien_0)
 
-# new_points = alien_0['points']
-# print(f"You just earned {new_points} points!")
+# Add a new key-value pair for the alien's x-coordinate position
+alien_0['x_position'] = 0
 
-# alien_0 = {'color': 'green', 'points': 5}
-# print(alien_0)
+# Add a new key-value pair for the alien's y-coordinate position
+alien_0['y_position'] = 25
 
-########################## Line 16 - 22 ############################################
+# Print the updated dictionary to show the newly added position information
+print(alien_0)
 
-# alien_0['x_position'] = 0
-# alien_0['y_position'] = 25
-# print(alien_0)
+# Create an empty dictionary to store information about an alien
+alien_0 = {}
 
-# alien_0 = {}
+# Add a key-value pair for the alien's color
+alien_0['color'] = 'green'
 
-# alien_0['color'] = 'green'
-# alien_0['points'] = 5
+# Add a key-value pair for the alien's points
+alien_0['points'] = 5
 
-# print(alien_0)
 
-########################## Line 26 - 35 ############################################ 
+# Print the dictionary to show its current contents
+print("Alien Dictionary:\n")
+print(alien_0)
 
-# alien_0 = {'color': 'green'}
-# print(f"The alien is {alien_0['color']}.")
+# Create a dictionary with the alien's initial color
+alien_0 = {'color': 'green'}
 
-# alien_0['color'] = 'yellow'
-# print(f"The alien is now {alien_0['color']}.")
+# Print the current color of the alien
+print(f"The alien is {alien_0['color']}.")
 
-# alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'medium'}
-# print(f"Original position: {alien_0['x_position']}")
+# Change the value associated with the 'color' key
+alien_0['color'] = 'yellow'
 
-########################## Line 39 - 46 ############################################ 
+# Print the updated color of the alien
+print(f"The alien is now {alien_0['color']}.\n")
 
-# # Move the alien to the right.
-# # Determine how far to move the alien based on its current speed.
-# if alien_0['speed'] == 'slow':
-#     x_increment = 1
-# elif alien_0['speed'] == 'medium':
-#     x_increment = 2
-# else:
-#     # This must be a fast alien.
-#     x_increment = 3
+# Create a dictionary to store the alien's position and speed
+alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'fast'}
 
-# # The new position is the old position plus the increment.
-# alien_0['x_position'] = alien_0['x_position'] + x_increment
+# Print the original horizontal position of the alien
+print(f"Original position: {alien_0['x_position']}")
 
-# print(f"New position: {alien_0['x_position']}")
 
-########################## Line 50 - 62 ############################################
+# Move the alien to the right.
+# Determine how far to move the alien based on its current speed.
+if alien_0['speed'] == 'slow':
+    x_increment = 1
+elif alien_0['speed'] == 'medium':
+    x_increment = 2
+else:
+    # This must be a fast alien.
+    x_increment = 3
 
-# alien_0 = {'color': 'green', 'points': 5}
-# print(alien_0)
+# The new position is the old position plus the increment.
+alien_0['x_position'] = alien_0['x_position'] + x_increment
 
-# del alien_0['points']
-# print(alien_0)
+# Print the new position of the alien
+print(f"New position: {alien_0['x_position']}\n")
 
-########################## Line 67 - 71 ############################################
+# Create a dictionary representing an alien with color and points
+alien_0 = {'color': 'green', 'points': 5}
 
-# Make an empty list for storing aliens.
+# Print the original dictionary
+print(alien_0)
+
+# Delete the 'points' key-value pair from the dictionary
+del alien_0['points']
+
+# Print the updated dictionary after deletion
+print(alien_0)
+alien_0 = {'color': 'green', 'points': 5}
+alien_1 = {'color': 'yellow', 'points': 10}
+alien_2 = {'color': 'red', 'points': 15}
+aliens = [alien_0, alien_1, alien_2]
+for alien in aliens:
+ print(alien)
+ # Make an empty list for storing aliens.
 aliens = []
-
 # Make 30 green aliens.
 for alien_number in range(30):
-    new_alien = {'color': 'green', 'points': 5, 'speed': 'slow'}
-    aliens.append(new_alien)
+ new_alien = {'color': 'green', 'points': 5, 'speed': 'slow'}
+ aliens.append(new_alien)
 
-# Show the first 5 aliens.
-for alien in aliens[:5]:
-    print(alien)
-print("...")
+# ... (20 lines left)
 
-# Show how many aliens have been created.
-print(f"Total number of aliens: {len(aliens)}")
+alien_0 = {'color': 'green', 'speed': 'slow'}
+# print(alien_0['points'])  # ❌ This will cause a KeyError
 
-########################## Line 75 - 89 ############################################
+# Try to get the value for 'points'; if it doesn't exist, return a default message
+point_value = alien_0.get('points', 'No point value assigned.')
 
-# Make an empty list for storing aliens.
-aliens = []
-
-# Make 30 green aliens.
-for alien_number in range(30):
-    new_alien = {'color': 'green', 'points': 5, 'speed': 'slow'}
-    aliens.append(new_alien)
-
-for alien in aliens[:3]:
-    if alien['color'] == 'green':
-        alien['color'] = 'yellow'
-        alien['speed'] = 'medium'
-        alien['points'] = 10
-
-# Show the first 5 aliens.
-for alien in aliens[:5]:
-    print(alien)
-print("...")
-
-# Show how many aliens have been created.
-print(f"Total number of aliens: {len(aliens)}")
-
-########################## Line 93 - 113 ############################################
+# Print the result
+print(point_value)
