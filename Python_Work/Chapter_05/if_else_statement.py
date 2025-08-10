@@ -1,6 +1,6 @@
-my_age = 14
+my_age = 17
 
-if my_age >= 20:
+if my_age > 20:
      print("You must be older than 20.")
 elif my_age < 20:
      print("You must be younger than 20.")

@@ -1,5 +1,5 @@
 # Variable name for if statement (age):
-age = 20
+age = 19
 
 # If statement for the age variable along wity it's conditions:
 if age < 4:
@@ -12,5 +12,5 @@ elif age < 65:
 elif age >= 65:
     price = 20
 
-# Print out prpmpt for an F - String in the terminal.
-print(f"Your admission cost is ${price}.")
+# Print out prompt for an F - String in the terminal.
+print(f"Your admission cost is $ {price}.")
