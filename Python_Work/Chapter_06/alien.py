@@ -57,7 +57,6 @@ alien_0 = {'x_position': 0, 'y_position': 25, 'speed': 'fast'}
 # Print the original horizontal position of the alien
 print(f"Original position: {alien_0['x_position']}")
 
-
 # Move the alien to the right.
 # Determine how far to move the alien based on its current speed.
 if alien_0['speed'] == 'slow':
