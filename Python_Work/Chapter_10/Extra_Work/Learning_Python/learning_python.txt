@@ -1,0 +1,4 @@
+In Python you can write readable code easily.
+In Python you can work with lists, dictionaries, and tuples.
+In Python you can write functions and classes to organize code.
+In Python you can handle files for reading and writing.

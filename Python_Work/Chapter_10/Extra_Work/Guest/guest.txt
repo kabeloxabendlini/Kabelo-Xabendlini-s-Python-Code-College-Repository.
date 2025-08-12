@@ -1,0 +1,2 @@
+In Python you can write readable code easily.
+In Python you can work with lists, dictionaries, and tuples.
