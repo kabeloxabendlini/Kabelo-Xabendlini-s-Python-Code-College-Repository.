@@ -1,0 +1,17 @@
+Summary
+
+1.  Setup & Models: Installed Django, created a project, added an app, defined models, 
+    ran migrations, and used the admin site and Django shell to manage data.
+
+2.  URLs, Views & Templates: Created URLs, view functions, and templates, 
+    using template inheritance for consistency.
+
+3.  Forms & User Accounts: Built forms so users could add/edit topics and entries. 
+    Implemented authentication with login, logout, and registration using UserCreationForm. 
+    Restricted access with @login_required, assigned data to users via foreign keys, 
+    and ensured users only see their own data with filters.
+    Styling: Applied Bootstrap with django-bootstrap5 for a professional, consistent look across devices.
+     Used components like Navbar and Jumbotron to style pages.
+
+4.  Deployment: Deployed the project to Platform.sh using Git. 
+    Secured the live app with DEBUG = False and custom error pages.
