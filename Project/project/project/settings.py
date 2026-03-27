@@ -9,7 +9,11 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-sot5rzd0ypoxn8p7p@hvk
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'kabelo-xabendlini-s-python-code-college.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 # Application definition
 INSTALLED_APPS = [
