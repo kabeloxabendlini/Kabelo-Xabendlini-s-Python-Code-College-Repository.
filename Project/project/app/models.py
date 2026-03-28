@@ -1,12 +1,12 @@
 # app - models.py file
 
 from django.db import models
+from cloudinary.models import CloudinaryField
 
-# Create your models here.
 class User(models.Model):
-    name=models.CharField(max_length=30)
-    photo=models.ImageField(upload_to="uploads",default="a.png")
-    email=models.EmailField(unique=True)
+    name = models.CharField(max_length=30)
+    photo = CloudinaryField('image', default='a.png')
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     mobile_number = models.CharField(max_length=15)
     date_of_birth = models.DateField()

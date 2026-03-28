@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from decouple import config
 import dj_database_url
 
@@ -23,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'cloudinary_storage',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     'cloudinary',
