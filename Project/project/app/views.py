@@ -4,6 +4,12 @@ from django.shortcuts import render,redirect
 from .models import User
 from .forms import UserForm
 # Create your views here.
+from django.http import HttpResponse
+
+def debug_photos(request):
+    users = User.objects.all()
+    output = "<br>".join([f"{u.name} | {u.photo}" for u in users])
+    return HttpResponse(output)
 
 def user_list(request):
     records=User.objects.all()
@@ -41,3 +47,4 @@ def ViewUser(request,eid=None):
     one_rec = User.objects.get(pk=eid)
     mydict['user']=one_rec
     return render(request,'''View.html''',mydict)
+
