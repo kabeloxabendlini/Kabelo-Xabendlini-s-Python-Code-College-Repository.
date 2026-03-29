@@ -1,5 +1,4 @@
 # app - views.py file
-# app - views.py file
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import User
