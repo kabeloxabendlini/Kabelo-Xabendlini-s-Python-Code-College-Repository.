@@ -34,14 +34,14 @@ async def run_game():
     while True:
         gf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets)
 
-        if stats.game_active:
+        if stats.game_active and not stats.game_paused:  # ✅ skip updates when paused
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
             gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
         gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button, stars)
 
-        await asyncio.sleep(0)  # ← CRITICAL for browser
+        await asyncio.sleep(0)
 
 
 asyncio.run(run_game())

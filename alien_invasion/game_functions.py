@@ -7,7 +7,6 @@ from alien import Alien
 
 
 def create_stars(ai_settings):
-    """Create a list of random star positions."""
     stars = []
     for _ in range(ai_settings.star_count):
         x = random.randint(0, ai_settings.screen_width)
@@ -19,19 +18,22 @@ def create_stars(ai_settings):
 
 
 def draw_stars(screen, stars):
-    """Draw a starfield background."""
     for (x, y, size, brightness) in stars:
         color = (brightness, brightness, brightness)
         pygame.draw.circle(screen, color, (x, y), size)
 
 
-def check_keydown_events(event, ai_settings, screen, ship, bullets):
+def check_keydown_events(event, ai_settings, screen, stats, ship, bullets):
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
         ship.moving_left = True
     elif event.key == pygame.K_SPACE:
-        fire_bullet(ai_settings, screen, ship, bullets)
+        if not stats.game_paused:  # ✅ don't fire while paused
+            fire_bullet(ai_settings, screen, ship, bullets)
+    elif event.key == pygame.K_p:
+        if stats.game_active:
+            stats.game_paused = not stats.game_paused  # ✅ toggle pause
     elif event.key == pygame.K_q:
         sys.exit()
 
@@ -48,7 +50,7 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bull
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, ai_settings, screen, ship, bullets)
+            check_keydown_events(event, ai_settings, screen, stats, ship, bullets)
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -65,6 +67,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button,
         pygame.mouse.set_visible(False)
         stats.reset_stats()
         stats.game_active = True
+        stats.game_paused = False  # ✅ reset pause on new game
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
@@ -83,11 +86,8 @@ def fire_bullet(ai_settings, screen, ship, bullets):
 
 def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button, stars):
     screen.fill(ai_settings.bg_color)
-
-    # Draw starfield
     draw_stars(screen, stars)
 
-    # Draw bullets
     for bullet in bullets.sprites():
         bullet.draw_bullet()
 
@@ -96,19 +96,34 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
     sb.show_score()
 
     if not stats.game_active:
-        # Semi-transparent overlay
         overlay = pygame.Surface((ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
         overlay.fill((0, 0, 20, 180))
         screen.blit(overlay, (0, 0))
 
-        # Title text
         title_font = pygame.font.SysFont("consolas", 72, bold=True)
         title = title_font.render("ALIEN INVASION", True, (0, 255, 255))
         title_rect = title.get_rect(center=(ai_settings.screen_width // 2,
                                             ai_settings.screen_height // 2 - 80))
         screen.blit(title, title_rect)
-
         play_button.draw_button()
+
+    # ✅ Draw pause overlay
+    if stats.game_paused and stats.game_active:
+        overlay = pygame.Surface((ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 150))
+        screen.blit(overlay, (0, 0))
+
+        pause_font = pygame.font.SysFont("consolas", 72, bold=True)
+        pause_text = pause_font.render("PAUSED", True, (0, 255, 255))
+        pause_rect = pause_text.get_rect(center=(ai_settings.screen_width // 2,
+                                                  ai_settings.screen_height // 2 - 30))
+        screen.blit(pause_text, pause_rect)
+
+        hint_font = pygame.font.SysFont("consolas", 28)
+        hint_text = hint_font.render("Press P to resume", True, (200, 200, 200))
+        hint_rect = hint_text.get_rect(center=(ai_settings.screen_width // 2,
+                                                ai_settings.screen_height // 2 + 40))
+        screen.blit(hint_text, hint_rect)
 
     pygame.display.flip()
 

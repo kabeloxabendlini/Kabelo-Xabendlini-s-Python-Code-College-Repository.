@@ -6,10 +6,9 @@ class GameStats:
         self.ai_settings = ai_settings
         self.reset_stats()
 
-        # Start game in an inactive state.
         self.game_active = False
+        self.game_paused = False  # ✅ new pause state
 
-        # High score should never be reset.
         self.high_score = 0
 
     def reset_stats(self):
