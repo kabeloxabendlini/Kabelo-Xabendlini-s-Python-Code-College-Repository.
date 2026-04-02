@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import asyncio
 import pygame
 from pygame.sprite import Group
@@ -15,6 +14,12 @@ import game_functions as gf
 async def run_game():
     pygame.init()
     ai_settings = Settings()
+
+    # ✅ Fill the full browser window
+    info = pygame.display.Info()
+    ai_settings.screen_width = info.current_w
+    ai_settings.screen_height = info.current_h
+
     screen = pygame.display.set_mode(
         (ai_settings.screen_width, ai_settings.screen_height)
     )
@@ -34,7 +39,7 @@ async def run_game():
     while True:
         gf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets)
 
-        if stats.game_active and not stats.game_paused:  # ✅ skip updates when paused
+        if stats.game_active and not stats.game_paused:
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
             gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets)

@@ -1,3 +1,4 @@
+import pygame
 import pygame.font
 from pygame.sprite import Group
 from ship import Ship
@@ -12,10 +13,13 @@ class Scoreboard:
         self.ai_settings = ai_settings
         self.stats = stats
 
-        self.text_color = (0, 255, 255)        # ✅ cyan text
-        self.label_color = (150, 150, 200)     # ✅ soft purple labels
-        self.font = pygame.font.SysFont("consolas", 36, bold=True)
-        self.label_font = pygame.font.SysFont("consolas", 20)
+        self.text_color = (0, 255, 255)
+        self.label_color = (100, 180, 255)
+        self.divider_color = (0, 100, 160)
+        self.font = pygame.font.SysFont("consolas", 34, bold=True)
+        self.label_font = pygame.font.SysFont("consolas", 14)
+        self.ship_icon_font = pygame.font.SysFont("consolas", 22, bold=True)
+        self.hud_height = 80
 
         self.prep_score()
         self.prep_high_score()
@@ -27,8 +31,8 @@ class Scoreboard:
         score_str = "{:,}".format(rounded_score)
         self.score_image = self.font.render(score_str, True, self.text_color)
         self.score_rect = self.score_image.get_rect()
-        self.score_rect.right = self.screen_rect.right - 20
-        self.score_rect.top = 20
+        self.score_rect.right = self.screen_rect.right - 30
+        self.score_rect.top = 38
 
     def prep_high_score(self):
         high_score = int(round(self.stats.high_score, -1))
@@ -36,39 +40,84 @@ class Scoreboard:
         self.high_score_image = self.font.render(high_score_str, True, self.text_color)
         self.high_score_rect = self.high_score_image.get_rect()
         self.high_score_rect.centerx = self.screen_rect.centerx
-        self.high_score_rect.top = 20
+        self.high_score_rect.top = 38
 
     def prep_level(self):
-        level_str = "LVL  " + str(self.stats.level)
+        level_str = str(self.stats.level)
         self.level_image = self.font.render(level_str, True, self.text_color)
         self.level_rect = self.level_image.get_rect()
-        self.level_rect.right = self.score_rect.right
-        self.level_rect.top = self.score_rect.bottom + 8
+        self.level_rect.top = 38
 
     def prep_ships(self):
-        self.ships = Group()
-        for ship_number in range(self.stats.ships_left):
-            ship = Ship(self.ai_settings, self.screen)
-            ship.rect.x = 10 + ship_number * (ship.rect.width + 5)
-            ship.rect.y = 10
-            self.ships.add(ship)
+        """Store ship count — drawn directly in show_score."""
+        self.ships = Group()  # kept for compatibility but not drawn below HUD
 
     def show_score(self):
-        # Draw HUD background bar
-        hud_rect = pygame.Rect(0, 0, self.screen_rect.width, 70)
-        hud_surface = pygame.Surface((hud_rect.width, hud_rect.height), pygame.SRCALPHA)
-        hud_surface.fill((0, 0, 60, 160))
-        self.screen.blit(hud_surface, hud_rect)
+        w = self.screen_rect.width
 
-        # Labels
-        score_label = self.label_font.render("SCORE", True, self.label_color)
-        self.screen.blit(score_label, (self.score_rect.right - score_label.get_width(), 6))
+        # Gradient HUD background
+        hud_surf = pygame.Surface((w, self.hud_height), pygame.SRCALPHA)
+        for i in range(self.hud_height):
+            alpha = int(220 - (i / self.hud_height) * 180)
+            pygame.draw.line(hud_surf, (0, 0, 40, alpha), (0, i), (w, i))
+        self.screen.blit(hud_surf, (0, 0))
 
-        high_label = self.label_font.render("BEST", True, self.label_color)
-        self.screen.blit(high_label, (self.high_score_rect.centerx - high_label.get_width() // 2, 6))
+        # Bottom border glow
+        pygame.draw.line(self.screen, (0, 180, 255),
+                         (0, self.hud_height - 2), (w, self.hud_height - 2), 1)
+        pygame.draw.line(self.screen, (0, 80, 120),
+                         (0, self.hud_height - 1), (w, self.hud_height - 1), 1)
 
-        # Values
-        self.screen.blit(self.score_image, self.score_rect)
-        self.screen.blit(self.high_score_image, self.high_score_rect)
+        # ✅ 4 equal sections
+        quarter = w // 4
+        for x in (quarter, quarter * 2, quarter * 3):
+            pygame.draw.line(self.screen, self.divider_color,
+                             (x, 10), (x, self.hud_height - 10), 1)
+
+        # ✅ Section center x positions
+        level_cx   = quarter // 2
+        best_cx    = quarter + quarter // 2
+        score_cx   = quarter * 2 + quarter // 2
+        ships_cx   = quarter * 3 + quarter // 2
+
+        # Section labels
+        label_y = 8
+        sections = [
+            ("LEVEL", level_cx),
+            ("BEST",  best_cx),
+            ("SCORE", score_cx),
+            ("LIVES", ships_cx),  # ✅ new ships section
+        ]
+        for label, cx in sections:
+            lbl = self.label_font.render(label, True, self.label_color)
+            lbl_rect = lbl.get_rect(centerx=cx, top=label_y)
+            underline_y = lbl_rect.bottom + 2
+            pygame.draw.line(self.screen, self.divider_color,
+                             (lbl_rect.left, underline_y),
+                             (lbl_rect.right, underline_y), 1)
+            self.screen.blit(lbl, lbl_rect)
+
+        # Update positions to center in their sections
+        self.level_rect.centerx = level_cx
+        self.high_score_rect.centerx = best_cx
+        self.score_rect.centerx = score_cx
+
+        # Draw values
         self.screen.blit(self.level_image, self.level_rect)
-        self.ships.draw(self.screen)
+        self.screen.blit(self.high_score_image, self.high_score_rect)
+        self.screen.blit(self.score_image, self.score_rect)
+
+        # ✅ Draw ship icons in LIVES section
+        ship_icon = self.ship_icon_font.render("▲", True, (0, 255, 255))
+        icon_w = ship_icon.get_width() + 4
+        total_w = icon_w * self.stats.ships_left
+        start_x = ships_cx - total_w // 2
+        icon_y = 36
+
+        for i in range(self.stats.ships_left):
+            self.screen.blit(ship_icon, (start_x + i * icon_w, icon_y))
+
+        # ✅ If no lives left show GAME OVER in red
+        if self.stats.ships_left == 0:
+            over = self.label_font.render("GAME OVER", True, (255, 60, 60))
+            self.screen.blit(over, over.get_rect(centerx=ships_cx, top=38))

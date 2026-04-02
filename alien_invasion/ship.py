@@ -10,13 +10,15 @@ class Ship(Sprite):
 
         self.image = pygame.image.load("images/ship.bmp")
         self.image = self.image.convert()
-        self.image.set_colorkey((230, 230, 230))  # ✅ correct background color
+        self.image.set_colorkey((230, 230, 230))
 
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
+        self.panel_height = 65  # ✅ panel + extra breathing room
+
         self.rect.centerx = self.screen_rect.centerx
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = self.screen_rect.bottom - self.panel_height
 
         self.center = float(self.rect.centerx)
 
@@ -26,7 +28,7 @@ class Ship(Sprite):
     def center_ship(self):
         self.center = self.screen_rect.centerx
         self.rect.centerx = self.center
-        self.rect.bottom = self.screen_rect.bottom
+        self.rect.bottom = self.screen_rect.bottom - self.panel_height
 
     def update(self):
         if self.moving_right and self.rect.right < self.screen_rect.right:
