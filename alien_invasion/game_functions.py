@@ -27,17 +27,47 @@ def draw_stars(screen, stars):
         pygame.draw.circle(screen, (brightness, brightness, brightness), (x, y), size)
 
 
-def draw_flash_effects(screen, stats):
-    still_flashing = []
-    for (rect, timer) in stats.flash_aliens:
+def draw_explosions(screen, stats):
+    """Draw expanding explosion effect on hit aliens."""
+    still_exploding = []
+    for (cx, cy, timer) in stats.flash_aliens:
         if timer > 0:
-            alpha = int(255 * (timer / 8))
-            flash_surf = pygame.Surface((rect.width, rect.height), pygame.SRCALPHA)
-            flash_surf.fill((255, 255, 100, alpha))
-            screen.blit(flash_surf, rect)
-            still_flashing.append((rect, timer - 1))
-    stats.flash_aliens = still_flashing
+            progress = 1 - (timer / 12)  # 0 to 1
+            radius = int(5 + 40 * progress)
+            alpha = int(255 * (timer / 12))
 
+            # ✅ Outer ring — orange
+            ring1 = pygame.Surface((radius * 2 + 4, radius * 2 + 4), pygame.SRCALPHA)
+            pygame.draw.circle(ring1, (255, 140, 0, alpha),
+                               (radius + 2, radius + 2), radius, 3)
+            screen.blit(ring1, (cx - radius - 2, cy - radius - 2))
+
+            # ✅ Inner ring — yellow
+            inner_r = max(1, radius - 10)
+            ring2 = pygame.Surface((inner_r * 2 + 4, inner_r * 2 + 4), pygame.SRCALPHA)
+            pygame.draw.circle(ring2, (255, 255, 0, alpha),
+                               (inner_r + 2, inner_r + 2), inner_r, 2)
+            screen.blit(ring2, (cx - inner_r - 2, cy - inner_r - 2))
+
+            # ✅ Core flash — white
+            core_r = max(1, radius - 20)
+            core = pygame.Surface((core_r * 2, core_r * 2), pygame.SRCALPHA)
+            pygame.draw.circle(core, (255, 255, 255, min(255, alpha + 80)),
+                               (core_r, core_r), core_r)
+            screen.blit(core, (cx - core_r, cy - core_r))
+
+            # ✅ Sparks — small dots flying outward
+            for i in range(6):
+                angle = (i / 6) * 2 * math.pi + progress * math.pi
+                spark_r = int(radius * 0.8)
+                sx = cx + int(spark_r * math.cos(angle))
+                sy = cy + int(spark_r * math.sin(angle))
+                spark_surf = pygame.Surface((6, 6), pygame.SRCALPHA)
+                pygame.draw.circle(spark_surf, (255, 200, 50, alpha), (3, 3), 3)
+                screen.blit(spark_surf, (sx - 3, sy - 3))
+
+            still_exploding.append((cx, cy, timer - 1))
+    stats.flash_aliens = still_exploding
 
 def draw_level_up_banner(screen, ai_settings, stats):
     if stats.show_level_up:
@@ -340,7 +370,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
 
     ship.blitme()
     aliens.draw(screen)
-    draw_flash_effects(screen, stats)
+    draw_explosions(screen, stats)
     sb.show_score()
     draw_controls(screen, ai_settings)
 
@@ -417,7 +447,10 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
             stats.score += ai_settings.alien_points * len(aliens_hit)
             sb.prep_score()
             for alien in aliens_hit:
-                stats.flash_aliens.append((alien.rect.copy(), 8))
+                # ✅ Store center point for explosion
+                cx = alien.rect.centerx
+                cy = alien.rect.centery
+                stats.flash_aliens.append((cx, cy, 12))  # 12 frame explosion
         check_high_score(stats, sb)
 
     if len(aliens) == 0:
