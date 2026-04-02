@@ -15,14 +15,12 @@ async def run_game():
     pygame.init()
     ai_settings = Settings()
 
-    # ✅ Fill the full browser window
     info = pygame.display.Info()
     ai_settings.screen_width = info.current_w
     ai_settings.screen_height = info.current_h
 
     screen = pygame.display.set_mode(
-        (ai_settings.screen_width, ai_settings.screen_height)
-    )
+        (ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption("Alien Invasion")
 
     play_button = Button(ai_settings, screen, "PLAY")
@@ -36,16 +34,23 @@ async def run_game():
     stars = gf.create_stars(ai_settings)
     gf.create_fleet(ai_settings, screen, ship, aliens)
 
+    clock = pygame.time.Clock()  # ✅ 60 FPS cap
+
     while True:
-        gf.check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets)
+        gf.check_events(ai_settings, screen, stats, sb,
+                        play_button, ship, aliens, bullets)
 
         if stats.game_active and not stats.game_paused:
             ship.update()
-            gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
-            gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets)
+            gf.update_bullets(ai_settings, screen, stats, sb,
+                              ship, aliens, bullets)
+            gf.update_aliens(ai_settings, screen, stats, sb,
+                             ship, aliens, bullets)
 
-        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button, stars)
+        gf.update_screen(ai_settings, screen, stats, sb,
+                         ship, aliens, bullets, play_button, stars)
 
+        clock.tick(60)
         await asyncio.sleep(0)
 
 

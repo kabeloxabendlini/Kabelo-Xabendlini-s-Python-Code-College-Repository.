@@ -1,6 +1,7 @@
 import sys
 from time import sleep
 import random
+import math
 import pygame
 from bullet import Bullet
 from alien import Alien
@@ -23,12 +24,10 @@ def create_stars(ai_settings):
 
 def draw_stars(screen, stars):
     for (x, y, size, brightness) in stars:
-        color = (brightness, brightness, brightness)
-        pygame.draw.circle(screen, color, (x, y), size)
+        pygame.draw.circle(screen, (brightness, brightness, brightness), (x, y), size)
 
 
 def draw_flash_effects(screen, stats):
-    """Draw flashing effect on hit aliens."""
     still_flashing = []
     for (rect, timer) in stats.flash_aliens:
         if timer > 0:
@@ -41,9 +40,7 @@ def draw_flash_effects(screen, stats):
 
 
 def draw_level_up_banner(screen, ai_settings, stats):
-    """Draw level up banner."""
     if stats.show_level_up:
-        alpha = min(255, stats.level_up_timer * 12)
         overlay = pygame.Surface(
             (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 60))
@@ -53,16 +50,14 @@ def draw_level_up_banner(screen, ai_settings, stats):
         font_small = pygame.font.SysFont("consolas", 32)
 
         title = font_big.render(f"LEVEL {stats.level}", True, (0, 255, 255))
-        title_rect = title.get_rect(
+        screen.blit(title, title.get_rect(
             center=(ai_settings.screen_width // 2,
-                    ai_settings.screen_height // 2 - 30))
-        screen.blit(title, title_rect)
+                    ai_settings.screen_height // 2 - 30)))
 
         sub = font_small.render("Aliens are faster!", True, (200, 200, 100))
-        sub_rect = sub.get_rect(
+        screen.blit(sub, sub.get_rect(
             center=(ai_settings.screen_width // 2,
-                    ai_settings.screen_height // 2 + 50))
-        screen.blit(sub, sub_rect)
+                    ai_settings.screen_height // 2 + 50)))
 
         stats.level_up_timer -= 1
         if stats.level_up_timer <= 0:
@@ -70,7 +65,6 @@ def draw_level_up_banner(screen, ai_settings, stats):
 
 
 def draw_lives_lost(screen, ai_settings, stats):
-    """Draw lives lost animation."""
     if stats.show_lives_lost:
         alpha = min(200, stats.lives_lost_timer * 10)
         overlay = pygame.Surface(
@@ -80,26 +74,23 @@ def draw_lives_lost(screen, ai_settings, stats):
 
         font = pygame.font.SysFont("consolas", 60, bold=True)
         msg = font.render("SHIP DESTROYED!", True, (255, 80, 80))
-        msg_rect = msg.get_rect(
+        screen.blit(msg, msg.get_rect(
             center=(ai_settings.screen_width // 2,
-                    ai_settings.screen_height // 2))
-        screen.blit(msg, msg_rect)
+                    ai_settings.screen_height // 2)))
 
         lives_font = pygame.font.SysFont("consolas", 30)
         lives_msg = lives_font.render(
             f"{stats.ships_left} ship(s) remaining", True, (255, 180, 180))
-        lives_rect = lives_msg.get_rect(
+        screen.blit(lives_msg, lives_msg.get_rect(
             center=(ai_settings.screen_width // 2,
-                    ai_settings.screen_height // 2 + 60))
-        screen.blit(lives_msg, lives_rect)
+                    ai_settings.screen_height // 2 + 60)))
 
         stats.lives_lost_timer -= 1
         if stats.lives_lost_timer <= 0:
             stats.show_lives_lost = False
 
 
-def draw_game_over(screen, ai_settings, stats, sb):
-    """Draw game over screen with final score."""
+def draw_game_over(screen, ai_settings, stats):
     overlay = pygame.Surface(
         (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
     overlay.fill((0, 0, 0, 200))
@@ -112,40 +103,53 @@ def draw_game_over(screen, ai_settings, stats, sb):
     cx = ai_settings.screen_width // 2
     cy = ai_settings.screen_height // 2
 
-    # Game Over title
     title = font_title.render("GAME OVER", True, (255, 60, 60))
     screen.blit(title, title.get_rect(center=(cx, cy - 120)))
 
-    # Divider
     pygame.draw.line(screen, (255, 60, 60),
                      (cx - 200, cy - 70), (cx + 200, cy - 70), 2)
 
-    # Final score
-    score_text = font_score.render(
-        f"Score: {stats.score:,}", True, (0, 255, 255))
+    score_text = font_score.render(f"Score: {stats.score:,}", True, (0, 255, 255))
     screen.blit(score_text, score_text.get_rect(center=(cx, cy - 30)))
 
-    # High score
     high_text = font_score.render(
         f"Best:  {stats.high_score:,}", True, (100, 180, 255))
     screen.blit(high_text, high_text.get_rect(center=(cx, cy + 30)))
 
-    # Level reached
     level_text = font_score.render(
         f"Level: {stats.level}", True, (200, 200, 100))
     screen.blit(level_text, level_text.get_rect(center=(cx, cy + 90)))
 
-    # Divider
     pygame.draw.line(screen, (0, 100, 160),
                      (cx - 200, cy + 130), (cx + 200, cy + 130), 1)
 
-    # Hint
     hint = font_hint.render("Click PLAY to try again", True, (150, 150, 200))
     screen.blit(hint, hint.get_rect(center=(cx, cy + 160)))
 
 
+def draw_quit_confirm(screen, ai_settings):
+    """Draw quit confirmation as a non-blocking overlay."""
+    overlay = pygame.Surface(
+        (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 180))
+    screen.blit(overlay, (0, 0))
+
+    font_big = pygame.font.SysFont("consolas", 52, bold=True)
+    font_small = pygame.font.SysFont("consolas", 30)
+
+    msg = font_big.render("Quit the game?", True, (0, 255, 255))
+    screen.blit(msg, msg.get_rect(
+        center=(ai_settings.screen_width // 2,
+                ai_settings.screen_height // 2 - 40)))
+
+    hint = font_small.render("Y = Return to title   |   N = Cancel",
+                              True, (200, 200, 200))
+    screen.blit(hint, hint.get_rect(
+        center=(ai_settings.screen_width // 2,
+                ai_settings.screen_height // 2 + 30)))
+
+
 def draw_controls(screen, ai_settings):
-    """Draw control panel with integrated touch buttons."""
     global touch_left_rect, touch_right_rect, touch_shoot_rect
 
     panel_height = 60
@@ -163,7 +167,6 @@ def draw_controls(screen, ai_settings):
     pygame.draw.line(screen, (0, 80, 120),
                      (0, panel_y + 1), (ai_settings.screen_width, panel_y + 1), 1)
 
-    import math
     pulse = (pygame.time.get_ticks() / 600) % (2 * math.pi)
     glow_alpha = int(40 + 30 * math.sin(pulse))
 
@@ -218,42 +221,20 @@ def draw_controls(screen, ai_settings):
         screen.blit(hint_surf, hint_surf.get_rect(center=(x, y)))
 
 
-def confirm_exit(screen, ai_settings):
-    font_big = pygame.font.SysFont("consolas", 52, bold=True)
-    font_small = pygame.font.SysFont("consolas", 30)
-
-    overlay = pygame.Surface(
-        (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
-    overlay.fill((0, 0, 0, 180))
-    screen.blit(overlay, (0, 0))
-
-    msg = font_big.render("Quit the game?", True, (0, 255, 255))
-    screen.blit(msg, msg.get_rect(
-        center=(ai_settings.screen_width // 2,
-                ai_settings.screen_height // 2 - 40)))
-
-    hint = font_small.render("Press Y to quit   |   Press N to cancel",
-                              True, (200, 200, 200))
-    screen.blit(hint, hint.get_rect(
-        center=(ai_settings.screen_width // 2,
-                ai_settings.screen_height // 2 + 30)))
-    pygame.display.flip()
-
-    waiting = True
-    while waiting:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_y:
-                    pygame.quit()
-                    sys.exit()
-                elif event.key == pygame.K_n:
-                    waiting = False
-            elif event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-
 def check_keydown_events(event, ai_settings, screen, stats, ship, bullets):
+    # ✅ Handle quit confirm screen first
+    if stats.show_quit_confirm:
+        if event.key == pygame.K_y:
+            stats.show_quit_confirm = False
+            stats.game_active = False
+            stats.show_game_over = False
+            stats.game_paused = False
+            pygame.mouse.set_visible(True)
+        elif event.key == pygame.K_n:
+            stats.show_quit_confirm = False
+            stats.game_paused = False
+        return
+
     if event.key == pygame.K_RIGHT:
         ship.moving_right = True
     elif event.key == pygame.K_LEFT:
@@ -265,7 +246,9 @@ def check_keydown_events(event, ai_settings, screen, stats, ship, bullets):
         if stats.game_active:
             stats.game_paused = not stats.game_paused
     elif event.key == pygame.K_q:
-        confirm_exit(screen, ai_settings)
+        if stats.game_active:
+            stats.show_quit_confirm = True
+            stats.game_paused = True
 
 
 def check_keyup_events(event, ship):
@@ -298,7 +281,8 @@ def check_touch_events(event, ai_settings, screen, stats, ship, bullets):
 def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            confirm_exit(screen, ai_settings)
+            stats.show_quit_confirm = True
+            stats.game_paused = True
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, ai_settings, screen, stats, ship, bullets)
         elif event.type == pygame.KEYUP:
@@ -326,9 +310,11 @@ def check_play_button(ai_settings, screen, stats, sb, play_button,
         stats.reset_stats()
         stats.game_active = True
         stats.game_paused = False
-        stats.show_game_over = False  # ✅ hide game over
+        stats.show_game_over = False
         stats.show_level_up = False
         stats.show_lives_lost = False
+        stats.show_quit_confirm = False
+        stats.flash_aliens = []
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
@@ -354,10 +340,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
 
     ship.blitme()
     aliens.draw(screen)
-
-    # ✅ Draw flash effects on hit aliens
     draw_flash_effects(screen, stats)
-
     sb.show_score()
     draw_controls(screen, ai_settings)
 
@@ -366,27 +349,31 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
             (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
         overlay.fill((0, 0, 20, 180))
         screen.blit(overlay, (0, 0))
+
         title_font = pygame.font.SysFont("consolas", 72, bold=True)
         title = title_font.render("ALIEN INVASION", True, (0, 255, 255))
         screen.blit(title, title.get_rect(
             center=(ai_settings.screen_width // 2,
                     ai_settings.screen_height // 2 - 80)))
 
-        # ✅ Show game over screen
+        hint_font = pygame.font.SysFont("consolas", 20)
+        hint = hint_font.render("Press F11 for fullscreen", True, (80, 120, 160))
+        screen.blit(hint, hint.get_rect(
+            center=(ai_settings.screen_width // 2,
+                    ai_settings.screen_height // 2 + 60)))
+
         if stats.show_game_over:
-            draw_game_over(screen, ai_settings, stats, sb)
+            draw_game_over(screen, ai_settings, stats)
 
         play_button.draw_button()
 
-    # ✅ Level up banner
     if stats.show_level_up:
         draw_level_up_banner(screen, ai_settings, stats)
 
-    # ✅ Lives lost animation
     if stats.show_lives_lost:
         draw_lives_lost(screen, ai_settings, stats)
 
-    if stats.game_paused and stats.game_active:
+    if stats.game_paused and stats.game_active and not stats.show_quit_confirm:
         overlay = pygame.Surface(
             (ai_settings.screen_width, ai_settings.screen_height), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 150))
@@ -401,6 +388,10 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_bu
         screen.blit(hint_text, hint_text.get_rect(
             center=(ai_settings.screen_width // 2,
                     ai_settings.screen_height // 2 + 40)))
+
+    # ✅ Draw quit confirm overlay on top of everything
+    if stats.show_quit_confirm:
+        draw_quit_confirm(screen, ai_settings)
 
     pygame.display.flip()
 
@@ -425,7 +416,6 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
         for aliens_hit in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens_hit)
             sb.prep_score()
-            # ✅ Add flash effect for each hit alien
             for alien in aliens_hit:
                 stats.flash_aliens.append((alien.rect.copy(), 8))
         check_high_score(stats, sb)
@@ -435,7 +425,6 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
         ai_settings.increase_speed()
         stats.level += 1
         sb.prep_level()
-        # ✅ Show level up banner
         stats.show_level_up = True
         stats.level_up_timer = 120
         create_fleet(ai_settings, screen, ship, aliens)
@@ -458,12 +447,11 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
     if stats.ships_left > 0:
         stats.ships_left -= 1
         sb.prep_ships()
-        # ✅ Show lives lost animation
         stats.show_lives_lost = True
         stats.lives_lost_timer = 80
     else:
         stats.game_active = False
-        stats.show_game_over = True  # ✅ show game over screen
+        stats.show_game_over = True
         pygame.mouse.set_visible(True)
 
     aliens.empty()
